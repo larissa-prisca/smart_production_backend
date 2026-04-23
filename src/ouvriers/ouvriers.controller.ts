@@ -27,6 +27,7 @@ export class OuvriersController {
 
   @Post('presence/:rfid')
   async registerPresence(@Param('rfid') rfid: string) {
+    console.log(`📡 Scan RFID reçu du Pi: [${rfid}]`);
     const ouvrier = await this.ouvriersService.findByRfid(rfid);
     
     if (!ouvrier) {

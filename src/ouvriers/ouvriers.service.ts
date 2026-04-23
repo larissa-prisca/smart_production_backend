@@ -31,7 +31,8 @@ export class OuvriersService {
   }
 
   findByRfid(rfid: string) {
-    return this.ouvriersRepository.findOne({ where: { rfid } });
+    const cleanRfid = rfid.trim().toUpperCase();
+    return this.ouvriersRepository.findOne({ where: { rfid: cleanRfid } });
   }
 
   async update(id: number, updateOuvrierDto: UpdateOuvrierDto) {
@@ -45,7 +46,8 @@ export class OuvriersService {
   }
 
   async marquerPresence(rfid: string) {
-    const ouvrier = await this.ouvriersRepository.findOne({ where: { rfid } });
+    const cleanRfid = rfid.trim().toUpperCase();
+    const ouvrier = await this.ouvriersRepository.findOne({ where: { rfid: cleanRfid } });
     if (!ouvrier) return null;
     ouvrier.dernierePresence = new Date();
     const saved = await this.ouvriersRepository.save(ouvrier);
