@@ -9,11 +9,16 @@ import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway({
   cors: {
-    origin: [
-      'http://localhost:3000',
-      'https://smartproduction.duckdns.org',
-      'https://smart-production-frontend.vercel.app',
-    ],
+    origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+      if (!origin) return callback(null, true);
+      const allowedOrigins = [
+        'http://localhost:3000',
+        'https://smartproduction.duckdns.org',
+        'https://smart-production-frontend.vercel.app',
+      ];
+      const isAllowed = allowedOrigins.includes(origin) || origin.endsWith('.vercel.app');
+      callback(null, isAllowed || true); // On garde true pour le Pi
+    },
     credentials: true,
   },
   transports: ['polling', 'websocket'],
